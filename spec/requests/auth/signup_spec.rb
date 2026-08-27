@@ -8,8 +8,8 @@ RSpec.describe "Signup API", type: :request do
           "first_name": "Ajai",
           "last_name": "Ganesh",
           "email": "ajai.ganesh7@gmail.com",
-          "password": "Ganesh@1061",
-          "password_confirmation": "Ganesh@1061"
+          "password": "Bigil@1061",
+          "password_confirmation": "Bigil@1061"
         }
       }
     end
@@ -24,10 +24,13 @@ RSpec.describe "Signup API", type: :request do
       it "return a created user" do
         post "/api/sign_up", params: valid_params
         body = JSON.parse(response.body)
-        expect(body["data"]["email"]).to eq("ajai.ganesh7@gmail.com")
+        expect(body["data"]).to eq("Verification email has been sent")
+      end
+      it "enqueues the verification email job" do
+        expect { post "/api/sign_up", params: valid_params }.to have_enqueued_job(SendVerificationEmailJob)
       end
     end
-    context "when passwords do not match" do
+    context "with invalid parameters" do
       let(:invalid_params) do
         {
           user: {
@@ -45,6 +48,9 @@ RSpec.describe "Signup API", type: :request do
       it "returns a unprocessable entity" do
         post "/api/sign_up", params: invalid_params
         expect(response).to have_http_status(:unprocessable_entity)
+      end
+      it "doesnt enqueue a verfication email" do
+        expect { post "/api/sign_up", params: invalid_params }.not_to have_enqueued_job(SendVerificationEmailJob)
       end
     end
   end
