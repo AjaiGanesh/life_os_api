@@ -10,5 +10,6 @@ Rails.application.routes.draw do
     post "reset_password", to: "auth#reset_password"
     post "change_password", to: "auth#change_password"
     get "me", to: "base#me"
+    get "dashboard", to: "dashboard#show"
   end
 end
