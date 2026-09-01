@@ -176,7 +176,7 @@ RSpec.describe "Verify Email API", type: :request do
           get "/api/verify_email", params: {
             token: token
           }
-        }.to have_enqueued_job(SendVerificationEmailJob)
+        }.to have_enqueued_job(ActionMailer::MailDeliveryJob)
           .with(user.id)
       end
     end

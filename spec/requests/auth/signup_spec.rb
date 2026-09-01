@@ -27,7 +27,7 @@ RSpec.describe "Signup API", type: :request do
         expect(body["data"]).to eq("Verification email has been sent")
       end
       it "enqueues the verification email job" do
-        expect { post "/api/sign_up", params: valid_params }.to have_enqueued_job(SendVerificationEmailJob)
+        expect { post "/api/sign_up", params: valid_params }.to have_enqueued_job(ActionMailer::MailDeliveryJob)
       end
     end
     context "with invalid parameters" do
