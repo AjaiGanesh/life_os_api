@@ -1,0 +1,5 @@
+:retry: 3
+:schedule:
+  cleanup_revoked_sessions:
+    cron: "0 2 * * *"
+    class: "CleanupRevokedSessionsJob"

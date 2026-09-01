@@ -4,7 +4,7 @@ class Auth::SignupService
     user.email_verification_digest = SecureRandom.urlsafe_base64(32)
     user.email_verification_expires_at = 15.minutes.from_now
     if user.save
-      SendVerificationEmailJob.perform_later(user.id)
+      UserMailer.verification_email(user).deliver_later
       { success: true, data: "Verification email has been sent", status: :created }
     else
       { success: false, errors: user.errors.full_messages, status: :unprocessable_entity }
