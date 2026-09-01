@@ -60,3 +60,7 @@ group :development, :test do
 end
 
 gem "sidekiq", "~> 8.1"
+
+gem "jwt", "~> 3.2"
+
+gem "sidekiq-cron", "~> 2.4"
