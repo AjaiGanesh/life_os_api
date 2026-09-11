@@ -5,7 +5,7 @@ class User < ApplicationRecord
   enum :status, {
     created: "created",
     active: "active",
-    suspended: "suspended"
+    deactive: "deactive"
   }
 
   validates :first_name, presence: true, length: { minimum: 3, maximum: 50 }

@@ -2,10 +2,6 @@ class BaseController < ApplicationController
   before_action :authenticate_user!
   attr_reader :current_user
 
-  def me
-    render json: { data: current_user }, status: :ok
-  end
-
   private
 
   def authenticate_user!

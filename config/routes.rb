@@ -9,7 +9,9 @@ Rails.application.routes.draw do
     post "forgot_password", to: "auth#forgot_password"
     post "reset_password", to: "auth#reset_password"
     post "change_password", to: "auth#change_password"
-    get "me", to: "base#me"
+    get "me", to: "users#show"
     get "dashboard", to: "dashboard#show"
+    patch "me", to: "users#update"
+    patch "me/deactivate", to: "users#deactivate"
   end
 end
