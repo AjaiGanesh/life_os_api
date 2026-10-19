@@ -90,5 +90,60 @@ RSpec.describe "Dashboard API", type: :request do
         expect(response).to have_http_status(:unauthorized)
       end
     end
+
+    context "when the token is expired" do
+      it "returns 401 Unauthorized" do
+        allow(JWT).to receive(:decode).and_raise(JWT::ExpiredSignature)
+
+        get "/api/dashboard",
+            headers: { "Authorization" => Auth::JwtService.encode(user.id, session.id) }
+
+        expect(response).to have_http_status(:unauthorized)
+        expect(response.parsed_body["errors"]).to be_present
+      end
+    end
+
+    context "when the Bearer token is malformed" do
+      it "returns 401 Unauthorized" do
+        get "/api/dashboard",
+            headers: { "Authorization" => "Bearer invalid-token" }
+
+        expect(response).to have_http_status(:unauthorized)
+        expect(response.parsed_body["errors"]).to be_present
+      end
+    end
+
+    context "when the user is deactivated" do
+      it "returns 401 Unauthorized" do
+        user.update!(status: :deactive)
+
+        get "/api/dashboard",
+            headers: { "Authorization" => Auth::JwtService.encode(user.id, session.id) }
+
+        expect(response).to have_http_status(:unauthorized)
+        expect(response.parsed_body["errors"]).to be_present
+      end
+    end
+
+    context "when the session does not exist" do
+      it "returns 401 Unauthorized" do
+        token = Auth::JwtService.encode(user.id, "unknown-session-id")
+
+        get "/api/dashboard",
+            headers: { "Authorization" => token }
+
+        expect(response).to have_http_status(:unauthorized)
+        expect(response.parsed_body["errors"]).to be_present
+      end
+    end
+  end
+
+  describe "GET /api/me" do
+    it "returns 401 for an unauthenticated request to /api/me" do
+      get "/api/me"
+
+      expect(response).to have_http_status(:unauthorized)
+      expect(response.parsed_body["errors"]).to be_present
+    end
   end
 end
