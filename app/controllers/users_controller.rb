@@ -5,7 +5,7 @@ class UsersController < BaseController
 
   def update
     if current_user.update(update_user_params)
-      render json: {data: current_user}, status: :ok
+      render json: { data: current_user }, status: :ok
     else
       render json: { success: false, errors: current_user.errors.full_messages }, status: :unprocessable_entity
     end
