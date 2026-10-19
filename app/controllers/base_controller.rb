@@ -26,8 +26,7 @@ class BaseController < ApplicationController
   def render_unauthorized(message)
     render json: {
       success: false,
-      errors: message,
-      status: :unauthorized
-    }
+      errors: message
+    }, status: :unauthorized
   end
 end
