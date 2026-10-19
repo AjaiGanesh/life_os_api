@@ -1,5 +1,5 @@
 class AuthController < BaseController
-  skip_before_action :authenticate_user!, except: [ :sign_out, :sign_out_all, :change_password ]
+  skip_before_action :authenticate_user!, only: [ :sign_out, :sign_out_all, :change_password ]
   def sign_up
     result = Auth::SignupService.call(signup_params)
     if result[:success]
